@@ -67,10 +67,36 @@ defmodule Country do
   end
 
   def frequency(word) do
-    tuple = File.read("../countries.csv")
-    list = String.split(elem(tuple, 1), [",", "\n", " "])
+    {:ok, contents} = File.read("countries.csv")
 
-    Enum.filter(list, fn country -> country == word end)
+    String.split(contents, [",", "\n", " "])
+    |> Enum.filter(&(&1 == word))
     |> Enum.count()
+  end
+
+  def fibonacci_series(number) do
+    case number do
+      ^number = 0 -> 0
+      ^number = 1 -> 1
+      _ -> fibonacci_series(number - 1) + fibonacci_series(number - 2)
+    end
+  end
+
+  def get_contents do
+    {:ok, contents} = File.read("countries.csv")
+    String.split(contents, [",", "\n", " "])
+  end
+
+  def recursive_frequency(word, [], accumulator) do
+    accumulator
+  end
+
+  def recursive_frequency(word, contents, accumulator) do
+    [head | tail] = contents
+
+    case word do
+      ^head = ^word -> recursive_frequency(word, tail, accumulator + 1)
+      _ -> recursive_frequency(word, tail, accumulator)
+    end
   end
 end
